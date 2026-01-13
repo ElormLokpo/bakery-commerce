@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: bakery-api
+    runtime: docker
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: .
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
