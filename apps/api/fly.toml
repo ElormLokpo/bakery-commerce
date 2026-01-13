@@ -1,15 +1,17 @@
-app = "your-app-name"
-primary_region = "sjc"  # or your chosen region
+app = "bakery-api"
+primary_region = "sjc"  
 
 [build]
-  dockerfile = "Dockerfile"
+   dockerfile = "apps/api/Dockerfile"
+
+   build-target = "release"
 
 [http_service]
   internal_port = 8080
   force_https = true
   auto_stop_machines = "stop"
   auto_start_machines = true
-  min_machines_running = 0  # Scale to zero when idle (free tier)
+  min_machines_running = 0
   processes = ["app"]
 
   [[http_service.checks]]
@@ -20,10 +22,10 @@ primary_region = "sjc"  # or your chosen region
     path = "/"
 
 [[vm]]
-  memory = '256mb'  # Free tier
+  memory = '256mb'  
   cpu_kind = 'shared'
   cpus = 1
 
 [env]
   NODE_ENV = "production"
-  # Add other non-secret env vars here
+  
