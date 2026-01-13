@@ -1,61 +1,47 @@
-name: Lint Check
-
+name: CI/CD
 on:
   pull_request:
-    branches: [main, develop]
+    branches: [main]
   push:
-    branches: [main, develop]
+    branches: [main]
 
 jobs:
-  lint:
-    name: Run ESLint
+  lint-and-test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
+      - uses: actions/checkout@v4
+      
+      - uses: oven-sh/setup-bun@v1
         with:
-          version: 8
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "18"
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
-
-      - name: Run linter
-        run: pnpm run lint
-
-      # - name: Check formatting
-      #   run: pnpm run format:check
-
-  type-check:
-    name: TypeScript Check
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "18"
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
-
+          bun-version: latest
+      
+      - run: bun install
+      
+      - name: Lint
+        run: bun run lint
+      
       - name: Type check
-        run: pnpm run type-check
+        run: bun run type-check
+      
+      - name: Test
+        run: bun run test
+
+  # deploy-frontend:
+  #   needs: lint-and-test
+  #   if: github.ref == 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   steps:
+    
+  #     - run: echo "Frontend deploys automatically"
+
+  # deploy-backend:
+  #   needs: lint-and-test
+  #   if: github.ref == 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   steps:
+     
+  #     - uses: actions/checkout@v4
+  #     - uses: superfly/flyctl-actions/setup-flyctl@master # for Fly.io
+  #     - run: flyctl deploy --remote-only
+  #       env:
+  #         FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
