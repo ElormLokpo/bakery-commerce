@@ -1,23 +1,19 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
+import * as dotenv from "dotenv"
+
+dotenv.config();
 
 const app = new Hono()
 
 app.use('/*', cors({
   origin: [
-    'https://your-nextjs-app.vercel.app',
-    'http://localhost:3000'
+    process.env.NEXT_APP_URL as string ,
+    process.env.NEXT_LOCALHOST as string
   ],
   credentials: true,
 }))
 
-app.get('/health', (c) => {
-  return c.json({ status: 'ok', timestamp: new Date().toISOString() })
-})
-
-app.get('/', (c) => {
-  return c.json({ message: 'Hello from Hono on Render!' })
-})
 
 
 const port = parseInt(process.env.PORT || '10000')
