@@ -7,9 +7,13 @@
     "type-check:local": "tsc --noEmit"
   },
   "dependencies": {
-    "hono": "^4.11.3"
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.45.1",
+    "hono": "^4.11.3",
+    "postgres": "^3.4.8"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "drizzle-kit": "^0.31.8"
   }
 }
