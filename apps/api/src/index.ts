@@ -25,3 +25,4 @@ Bun.serve({
 })
 
 console.log(`Server running on http://0.0.0.0:${port}`)
+console.log(`env check :`, process.env.NEXT_APP_URL, process.env.NEXT_LOCALHOST)
